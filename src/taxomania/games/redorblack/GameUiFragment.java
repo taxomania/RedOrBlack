@@ -1,7 +1,9 @@
 package taxomania.games.redorblack;
 
+import taxomania.games.redorblack.GameEngine.Colour;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,37 +14,39 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.Toast;
 
 public class GameUiFragment extends Fragment {
-    private static enum Colours { RED, BLACK };
-
+    private static final String TAG = GameUiFragment.class.getSimpleName();
     private RelativeLayout mRl;
+    private GameEngine mGame;
     private int mGuess = 0;
 
     public GameUiFragment() {
     } // GameFragment()
 
-    public static GameUiFragment newInstance() {
-        return new GameUiFragment();
-    } // newInstance()
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mGame = new GameEngine();
+    } // onCreate(Bundle)
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
             final Bundle savedInstanceState) {
+        Toast.makeText(getActivity(), TAG, Toast.LENGTH_SHORT).show();
         mRl = new RelativeLayout(getActivity());
-        mRl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-                LayoutParams.FILL_PARENT));
+        mRl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
         final int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
                 getActivity().getResources().getDisplayMetrics());
         mRl.setPadding(padding, padding, padding, padding);
 
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,
+                LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
         mRl.addView(createButtons(), lp);
 
-        lp = new RelativeLayout.LayoutParams(
-                LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         mRl.addView(createAnswerBlocks(), lp);
 
@@ -79,7 +83,7 @@ public class GameUiFragment extends Fragment {
 
             @Override
             public void onClick(final View v) {
-                updateAnswerBlock(Colours.RED);
+                updateAnswerBlock(Colour.RED);
             } // onClick(View)
         });
         tr.addView(red);
@@ -90,7 +94,7 @@ public class GameUiFragment extends Fragment {
 
             @Override
             public void onClick(final View v) {
-                updateAnswerBlock(Colours.BLACK);
+                updateAnswerBlock(Colour.BLACK);
             } // onClick(View)
         });
         tr.addView(black);
@@ -98,7 +102,18 @@ public class GameUiFragment extends Fragment {
         return tl;
     } // createButtons()
 
-    private void updateAnswerBlock(final Colours colour) {
-        final ImageView image = (ImageView)mRl.findViewWithTag((Integer)mGuess);
+    private void updateAnswerBlock(final Colour colour) {
+        if (mGame.getPosition(mGuess).equals(colour)) {
+            // TODO: Change drawable
+            ((ImageView) mRl.findViewWithTag((Integer) mGuess)).setImageResource(R.drawable.icon);
+            mGuess++;
+            Log.d(TAG, "Correct");
+        } // if
+        else {
+            Log.d(TAG, "Incorrect");
+            if (getActivity() instanceof RedOrBlackActivity) {
+                ((RedOrBlackActivity) getActivity()).loseGame();
+            } // if
+        } // else
     } // updateAnswerBlock(Colours)
 } // GameFragment
