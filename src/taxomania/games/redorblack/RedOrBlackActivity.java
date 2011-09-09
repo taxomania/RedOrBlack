@@ -9,6 +9,7 @@ public class RedOrBlackActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        startNewGame();
     } // onCreate(Bundle)
 
     void loseGame() {
@@ -16,7 +17,7 @@ public class RedOrBlackActivity extends FragmentActivity {
     } // loseGame()
 
     private void replaceFragment(final Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.layout, fragment).commit();
     } // replaceFragment(Fragment)
 
     void startNewGame() {
