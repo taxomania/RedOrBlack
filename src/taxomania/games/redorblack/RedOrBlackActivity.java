@@ -29,6 +29,7 @@ public class RedOrBlackActivity extends FragmentActivity {
         mainLayout.setId(MAIN_LAYOUT_ID);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setBackgroundColor(Color.GRAY);
+
         final DisplayMetrics dm = getResources().getDisplayMetrics();
         final int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, PADDING,
                 dm);
