@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.Toast;
 
 public class GameUiFragment extends Fragment {
     private static final String TAG = GameUiFragment.class.getSimpleName();
@@ -34,7 +33,6 @@ public class GameUiFragment extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
             final Bundle savedInstanceState) {
-        Toast.makeText(getActivity(), TAG, Toast.LENGTH_SHORT).show();
         mRl = new RelativeLayout(getActivity());
         mRl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
         final int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
