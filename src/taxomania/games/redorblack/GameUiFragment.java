@@ -1,5 +1,7 @@
 package taxomania.games.redorblack;
 
+import java.text.NumberFormat;
+
 import taxomania.games.redorblack.GameEngine.Colour;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -23,15 +25,16 @@ public class GameUiFragment extends Fragment {
     private static final String TAG = GameUiFragment.class.getSimpleName();
     private static final int MAX_TURNS = 20;
     private static final int FOOTER_VIEW_ID = 5555;
-    private static final int ANSWER_VIEW_ID = 5556;
+    private static final int ANSWER_VIEW_ID = FOOTER_VIEW_ID + 1;
+    private static final int CHANCES_VIEW_ID = ANSWER_VIEW_ID + 1;
 
     private static int sHighscore = 0;
 
-    private int mGuess = 0;
+    private int mGuess;
     private GameEngine mGame;
     private RedOrBlackActivity mFragActivity;
     private RelativeLayout mRl;
-    private TextView mTopScoreTextView, mNumCorrectTextView;
+    private TextView mTopScoreTextView, mNumCorrectTextView, mChancesTextView;
 
     public GameUiFragment() {
     } // GameFragment()
@@ -61,6 +64,15 @@ public class GameUiFragment extends Fragment {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,
                 LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+        mChancesTextView = new TextView(mFragActivity);
+        mChancesTextView.setId(CHANCES_VIEW_ID);
+        mChancesTextView.setGravity(Gravity.CENTER);
+        mChancesTextView.setTextColor(Color.BLACK);
+        setChancesText();
+        mRl.addView(mChancesTextView, lp);
+
+        lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.BELOW, mChancesTextView.getId());
         mRl.addView(createButtons(), lp);
 
         lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
@@ -95,6 +107,15 @@ public class GameUiFragment extends Fragment {
         tl.addView(tr);
         return tl;
     } // createFooterView()
+
+    private String getChances() {
+        final NumberFormat nf = NumberFormat.getInstance();
+        return nf.format(mGame.getProbability(mGuess) * 100) + "%";
+    } // getChances()
+
+    private void setChancesText() {
+        mChancesTextView.setText("You have a " + getChances() + " chance of being correct");
+    } // setChancesText()
 
     private void setCurrentTurnText() {
         mNumCorrectTextView.setText("Correct: " + mGuess);
@@ -171,6 +192,7 @@ public class GameUiFragment extends Fragment {
             } // switch
             mGuess++;
             setCurrentTurnText();
+            setChancesText();
             if (mGuess > sHighscore) {
                 setTopScoreText(mGuess);
             } // if
@@ -185,7 +207,7 @@ public class GameUiFragment extends Fragment {
             checkScore();
             mFragActivity.loseGame();
         } // else
-    }// updateAnswerBlock(Colours)
+    } // updateAnswerBlock(Colours)
 
     private void checkScore() {
         if (mGuess > sHighscore) {
