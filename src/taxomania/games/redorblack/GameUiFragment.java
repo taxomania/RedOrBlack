@@ -1,10 +1,13 @@
 package taxomania.games.redorblack;
 
 import taxomania.games.redorblack.GameEngine.Colour;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,12 +17,21 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TextView;
 
 public class GameUiFragment extends Fragment {
     private static final String TAG = GameUiFragment.class.getSimpleName();
-    private RelativeLayout mRl;
-    private GameEngine mGame;
+    private static final int MAX_TURNS = 20;
+    private static final int FOOTER_VIEW_ID = 5555;
+    private static final int ANSWER_VIEW_ID = 5556;
+
+    private static int sHighscore = 0;
+
     private int mGuess = 0;
+    private GameEngine mGame;
+    private RedOrBlackActivity mFragActivity;
+    private RelativeLayout mRl;
+    private TextView mTopScoreTextView, mNumCorrectTextView;
 
     public GameUiFragment() {
     } // GameFragment()
@@ -28,15 +40,22 @@ public class GameUiFragment extends Fragment {
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGame = new GameEngine();
+        mFragActivity = (RedOrBlackActivity) getActivity();
     } // onCreate(Bundle)
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getTopScore();
+    } // onResume()
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
             final Bundle savedInstanceState) {
-        mRl = new RelativeLayout(getActivity());
+        mRl = new RelativeLayout(mFragActivity);
         mRl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
         final int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
-                getActivity().getResources().getDisplayMetrics());
+                mFragActivity.getResources().getDisplayMetrics());
         mRl.setPadding(padding, padding, padding, padding);
 
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,
@@ -46,25 +65,64 @@ public class GameUiFragment extends Fragment {
 
         lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
-        mRl.addView(createAnswerBlocks(), lp);
+        final TableLayout footerTable = createFooterView();
+        mRl.addView(footerTable, lp);
+
+        lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ABOVE, footerTable.getId());
+        final TableLayout answersTable = createAnswerBlocks();
+        mRl.addView(answersTable, lp);
+
+        lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ABOVE, answersTable.getId());
+        mNumCorrectTextView = new TextView(mFragActivity);
+        mNumCorrectTextView.setGravity(Gravity.CENTER);
+        mNumCorrectTextView.setTextColor(Color.BLACK);
+        setCurrentTurnText();
+        mRl.addView(mNumCorrectTextView, lp);
 
         return mRl;
     } // onCreateView(LayoutInflater, ViewGroup, Bundle)
 
+    private TableLayout createFooterView() {
+        final TableLayout tl = new TableLayout(mFragActivity);
+        tl.setId(FOOTER_VIEW_ID);
+        final TableRow tr = new TableRow(mFragActivity);
+        mTopScoreTextView = new TextView(mFragActivity);
+        setTopScoreText();
+        mTopScoreTextView.setTextColor(Color.BLACK);
+        tr.addView(mTopScoreTextView);
+        tl.addView(tr);
+        return tl;
+    } // createFooterView()
+
+    private void setCurrentTurnText() {
+        mNumCorrectTextView.setText("Correct: " + mGuess);
+    } // setCurrentTurnText()
+
+    // Default implementation
+    private void setTopScoreText() {
+        setTopScoreText(sHighscore);
+    } // setTopScoreText()
+
+    private void setTopScoreText(final int score) {
+        mTopScoreTextView.setText("Best Score: " + score);
+    } // setTopScoreText(int)
+
     private TableLayout createAnswerBlocks() {
-        final TableLayout tl = new TableLayout(getActivity());
-        for (int i = 0; i < 2; i++) {
-            tl.addView(addAnswerRow());
-        } // for
+        final TableLayout tl = new TableLayout(mFragActivity);
+        tl.setId(ANSWER_VIEW_ID);
+        tl.addView(addAnswerRow(0, 10));
+        tl.addView(addAnswerRow(10, 20));
         return tl;
     } // createAnswerBlocks()
 
-    private TableRow addAnswerRow() {
-        final TableRow tr = new TableRow(getActivity());
-        for (int i = 0; i < 10; i++) {
-            // TODO: Change drawable
-            final ImageView image = new ImageView(getActivity());
-            image.setImageResource(R.drawable.icon);
+    private TableRow addAnswerRow(final int startTag, final int finishTag) {
+        final TableRow tr = new TableRow(mFragActivity);
+        tr.setGravity(Gravity.CENTER);
+        for (int i = startTag; i < finishTag; i++) {
+            final ImageView image = new ImageView(mFragActivity);
+            image.setImageResource(R.drawable.smalldefault);
             image.setTag(i);
             tr.addView(image);
         } // for
@@ -73,12 +131,11 @@ public class GameUiFragment extends Fragment {
 
     private TableLayout createButtons() {
         // TODO: Change drawables
-        final TableLayout tl = new TableLayout(getActivity());
-        final TableRow tr = new TableRow(getActivity());
-        final ImageView red = new ImageView(getActivity());
+        final TableLayout tl = new TableLayout(mFragActivity);
+        final TableRow tr = new TableRow(mFragActivity);
+        final ImageView red = new ImageView(mFragActivity);
         red.setImageResource(R.drawable.icon);
         red.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(final View v) {
                 updateAnswerBlock(Colour.RED);
@@ -86,10 +143,9 @@ public class GameUiFragment extends Fragment {
         });
         tr.addView(red);
 
-        final ImageView black = new ImageView(getActivity());
+        final ImageView black = new ImageView(mFragActivity);
         black.setImageResource(R.drawable.icon);
         black.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(final View v) {
                 updateAnswerBlock(Colour.BLACK);
@@ -102,16 +158,76 @@ public class GameUiFragment extends Fragment {
 
     private void updateAnswerBlock(final Colour colour) {
         if (mGame.getPosition(mGuess).equals(colour)) {
-            // TODO: Change drawable
-            ((ImageView) mRl.findViewWithTag((Integer) mGuess)).setImageResource(R.drawable.icon);
+            switch (colour) {
+                case BLACK:
+                    ((ImageView) mRl.findViewWithTag((Integer) mGuess))
+                            .setImageResource(R.drawable.smallblack);
+                    break;
+                case RED:
+                    ((ImageView) mRl.findViewWithTag((Integer) mGuess))
+                            .setImageResource(R.drawable.smallred);
+                default:
+                    break;
+            } // switch
             mGuess++;
+            setCurrentTurnText();
+            if (mGuess > sHighscore) {
+                setTopScoreText(mGuess);
+            } // if
+            if (mGuess == MAX_TURNS) {
+                checkScore();
+                mFragActivity.winGame();
+            } // if
             Log.d(TAG, "Correct");
         } // if
         else {
             Log.d(TAG, "Incorrect");
-            if (getActivity() instanceof RedOrBlackActivity) {
-                ((RedOrBlackActivity) getActivity()).loseGame();
-            } // if
+            checkScore();
+            mFragActivity.loseGame();
         } // else
-    } // updateAnswerBlock(Colours)
+    }// updateAnswerBlock(Colours)
+
+    private void checkScore() {
+        if (mGuess > sHighscore) {
+            mFragActivity.postTopScore(mGuess);
+        } // if
+        else {
+            Log.d(TAG, mGuess + " : " + sHighscore);
+        } // else
+    } // checkScore()
+
+    private RetrieveTopScore mScoreGetter = null;
+
+    private void getTopScore() {
+        stopScoreTask();
+        mScoreGetter = new RetrieveTopScore();
+        mScoreGetter.execute();
+    } // getTopScore()
+
+    private void stopScoreTask() {
+        if (mScoreGetter != null) {
+            mScoreGetter.cancel(true);
+            mScoreGetter = null;
+        } // if
+    } // stopScoreTask()
+
+    @Override
+    public void onPause() {
+        stopScoreTask();
+        super.onPause();
+    } // onPause()
+
+    private final class RetrieveTopScore extends AsyncTask<Void, Void, Integer> {
+        @Override
+        protected Integer doInBackground(final Void... noParams) {
+            return new TopScorePrefs(mFragActivity).getScore();
+        } // doInBackground(Void...)
+
+        @Override
+        protected void onPostExecute(final Integer result) {
+            sHighscore = result;
+            setTopScoreText();
+        } // onPostExecute(Integer)
+    } // RetrieveTopScore
+
 } // GameFragment

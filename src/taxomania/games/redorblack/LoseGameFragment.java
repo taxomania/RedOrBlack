@@ -25,7 +25,7 @@ public class LoseGameFragment extends Fragment implements OnClickListener {
         image.setOnClickListener(this);
         final RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        lp.addRule(RelativeLayout.CENTER_IN_PARENT);//, RelativeLayout.TRUE);
+        lp.addRule(RelativeLayout.CENTER_IN_PARENT);
         image.setLayoutParams(lp);
         rl.addView(image);
         return rl;

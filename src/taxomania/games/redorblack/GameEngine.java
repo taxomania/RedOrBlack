@@ -10,13 +10,17 @@ public class GameEngine {
 
     public GameEngine() {
         for (int i = 0; i < mColours.length; i++) {
-            final int rand = (int)Math.round(Math.random());
+            final int rand = (int) Math.round(Math.random());
             mColours[i] = (rand == 0) ? Colour.RED : Colour.BLACK;
         } // for
     } // GameEngine()
 
-    public Colour getPosition(final int pos){
+    public Colour getPosition(final int pos) {
         return mColours[pos];
-    } // getPosition
+    } // getPosition(int)
+
+    public double getProbability(final int guess) {
+        return Math.pow(0.5, guess+1);
+    } // getProbability(int)
 
 } // GameEngine
