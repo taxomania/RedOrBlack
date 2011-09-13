@@ -130,11 +130,11 @@ public class GameUiFragment extends Fragment {
     } // addAnswerRow()
 
     private TableLayout createButtons() {
-        // TODO: Change drawables
         final TableLayout tl = new TableLayout(mFragActivity);
         final TableRow tr = new TableRow(mFragActivity);
+        tr.setGravity(Gravity.CENTER);
         final ImageView red = new ImageView(mFragActivity);
-        red.setImageResource(R.drawable.icon);
+        red.setImageResource(R.drawable.red);
         red.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -144,7 +144,7 @@ public class GameUiFragment extends Fragment {
         tr.addView(red);
 
         final ImageView black = new ImageView(mFragActivity);
-        black.setImageResource(R.drawable.icon);
+        black.setImageResource(R.drawable.black);
         black.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(final View v) {
