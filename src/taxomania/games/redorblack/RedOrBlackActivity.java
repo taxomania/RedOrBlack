@@ -65,7 +65,7 @@ public class RedOrBlackActivity extends FragmentActivity {
     } // loseGame()
 
     void winGame() {
-        replaceFragment(new LoseGameFragment());
+        replaceFragment(new WinGameFragment());
     } // winGame()
 
     private void replaceFragment(final Fragment fragment) {
