@@ -42,7 +42,7 @@ public class GameUiFragment extends Fragment {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGame = new GameEngine();
+        mGame = new SimpleGameEngine();
         mFragActivity = (RedOrBlackActivity) getActivity();
     } // onCreate(Bundle)
 
@@ -178,7 +178,7 @@ public class GameUiFragment extends Fragment {
     } // createButtons()
 
     private void updateAnswerBlock(final Colour colour) {
-        if (mGame.getPosition(mGuess).equals(colour)) {
+        if (mGame.getColour(mGuess).equals(colour)) {
             switch (colour) {
                 case BLACK:
                     ((ImageView) mRl.findViewWithTag((Integer) mGuess))
