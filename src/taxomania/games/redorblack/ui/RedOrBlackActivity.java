@@ -1,5 +1,6 @@
-package taxomania.games.redorblack;
+package taxomania.games.redorblack.ui;
 
+import taxomania.games.redorblack.TopScorePrefs;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;

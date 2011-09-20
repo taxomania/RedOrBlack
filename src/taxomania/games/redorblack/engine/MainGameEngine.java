@@ -1,4 +1,4 @@
-package taxomania.games.redorblack;
+package taxomania.games.redorblack.engine;
 
 public class MainGameEngine extends GameEngine {
     private static final int COLOURS_NUM = 20;

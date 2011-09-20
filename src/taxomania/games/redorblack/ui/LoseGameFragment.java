@@ -1,5 +1,6 @@
-package taxomania.games.redorblack;
+package taxomania.games.redorblack.ui;
 
+import taxomania.games.redorblack.R;
 import android.widget.ImageView;
 
 public class LoseGameFragment extends EndGameFragment {

@@ -1,4 +1,4 @@
-package taxomania.games.redorblack;
+package taxomania.games.redorblack.engine;
 
 public class SimpleGameEngine extends GameEngine {
     public SimpleGameEngine() {

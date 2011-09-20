@@ -1,4 +1,4 @@
-package taxomania.games.redorblack;
+package taxomania.games.redorblack.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

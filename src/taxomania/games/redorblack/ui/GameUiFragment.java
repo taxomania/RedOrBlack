@@ -1,8 +1,12 @@
-package taxomania.games.redorblack;
+package taxomania.games.redorblack.ui;
 
 import java.text.NumberFormat;
 
-import taxomania.games.redorblack.GameEngine.Colour;
+import taxomania.games.redorblack.R;
+import taxomania.games.redorblack.TopScorePrefs;
+import taxomania.games.redorblack.engine.GameEngine;
+import taxomania.games.redorblack.engine.GameEngine.Colour;
+import taxomania.games.redorblack.engine.SimpleGameEngine;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
