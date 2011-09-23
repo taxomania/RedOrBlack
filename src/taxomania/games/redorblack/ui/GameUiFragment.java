@@ -28,9 +28,9 @@ import android.widget.TextView;
 public class GameUiFragment extends Fragment {
     private static final String TAG = GameUiFragment.class.getSimpleName();
     private static final int MAX_TURNS = 20;
-    private static final int FOOTER_VIEW_ID = 5555;
-    private static final int ANSWER_VIEW_ID = FOOTER_VIEW_ID + 1;
-    private static final int CHANCES_VIEW_ID = ANSWER_VIEW_ID + 1;
+    private static final int FOOTER_VIEW_ID = Integer.MAX_VALUE;
+    private static final int ANSWER_VIEW_ID = FOOTER_VIEW_ID - 1;
+    private static final int CHANCES_VIEW_ID = ANSWER_VIEW_ID - 1;
 
     private static int sHighscore = 0;
 
@@ -72,6 +72,7 @@ public class GameUiFragment extends Fragment {
         mChancesTextView.setId(CHANCES_VIEW_ID);
         mChancesTextView.setGravity(Gravity.CENTER);
         mChancesTextView.setTextColor(Color.BLACK);
+        mChancesTextView.setPadding(0, padding, 0, padding * 2);
         setChancesText();
         mRl.addView(mChancesTextView, lp);
 
@@ -178,6 +179,11 @@ public class GameUiFragment extends Fragment {
         });
         tr.addView(black);
         tl.addView(tr);
+
+        final int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4,
+                mFragActivity.getResources().getDisplayMetrics());
+        black.setPadding(padding, 0, 0, 0);
+        red.setPadding(0, 0, padding, 0);
         return tl;
     } // createButtons()
 
