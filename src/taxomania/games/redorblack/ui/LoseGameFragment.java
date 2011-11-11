@@ -9,7 +9,6 @@ public class LoseGameFragment extends EndGameFragment {
 
     @Override
     void setImage(final ImageView image) {
-        // TODO: Change drawable
-        image.setImageResource(R.drawable.icon);
+        image.setImageResource(R.drawable.youlose);
     } // setImage(ImageView)
 } // LoseGameFragment

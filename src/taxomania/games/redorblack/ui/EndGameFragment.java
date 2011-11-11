@@ -17,9 +17,9 @@ public abstract class EndGameFragment extends Fragment implements OnClickListene
     @Override
     public final View onCreateView(final LayoutInflater inflater, final ViewGroup container,
             final Bundle savedInstanceState) {
-        // TODO: Change drawable
         final RelativeLayout rl = new RelativeLayout(getActivity());
         rl.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+
         final ImageView image = new ImageView(getActivity());
         setImage(image);
         image.setOnClickListener(this);

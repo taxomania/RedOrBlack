@@ -9,7 +9,6 @@ public class WinGameFragment extends EndGameFragment {
 
     @Override
     void setImage(final ImageView image) {
-        // TODO: Change drawable
-        image.setImageResource(R.drawable.icon);
+        image.setImageResource(R.drawable.youwin);
     } // setImage(ImageView)
 } // WinGameFragment
