@@ -10,11 +10,9 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 public class RedOrBlackActivity extends FragmentActivity {
     private static final int MAIN_LAYOUT_ID = Integer.MAX_VALUE;
-    private static final int TEXT_SIZE_DIP = 30;
     private static final int PADDING_DIP = 10;
 
     private PostTopScore mScorePoster = null;
@@ -31,24 +29,13 @@ public class RedOrBlackActivity extends FragmentActivity {
         mainLayout.setId(MAIN_LAYOUT_ID);
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         mainLayout.setBackgroundResource(R.drawable.bg);
-
         final DisplayMetrics dm = getResources().getDisplayMetrics();
         final int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 PADDING_DIP, dm);
         mainLayout.setPadding(padding, padding, padding, padding);
 
-        mainLayout.addView(makeHeaderSpace());
-
         return mainLayout;
     } // setLayout()
-
-    private TextView makeHeaderSpace() {
-        final TextView tv = new TextView(this);
-        tv.setMinLines(3);
-        tv.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, TEXT_SIZE_DIP,
-                getResources().getDisplayMetrics()));
-        return tv;
-    } // makeHeaderText()
 
     void loseGame() {
         replaceFragment(new LoseGameFragment());

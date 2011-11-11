@@ -29,7 +29,8 @@ public class GameUiFragment extends Fragment {
     private static final int MAX_TURNS = 20;
     private static final int FOOTER_VIEW_ID = Integer.MAX_VALUE;
     private static final int ANSWER_VIEW_ID = FOOTER_VIEW_ID - 1;
-    private static final int CHANCES_VIEW_ID = ANSWER_VIEW_ID - 1;
+    private static final int BUTTONS_VIEW_ID = ANSWER_VIEW_ID - 1;
+    private static final int NUM_CORRECT_VIEW_ID = BUTTONS_VIEW_ID - 1;
 
     private static int sHighscore = 0;
 
@@ -66,20 +67,6 @@ public class GameUiFragment extends Fragment {
 
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT,
                 LayoutParams.WRAP_CONTENT);
-        lp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
-        mChancesTextView = new TextView(mFragActivity);
-        mChancesTextView.setId(CHANCES_VIEW_ID);
-        mChancesTextView.setGravity(Gravity.CENTER);
-        mChancesTextView.setTextColor(Color.BLACK);
-        mChancesTextView.setPadding(0, padding, 0, padding * 2);
-        setChancesText();
-        mRl.addView(mChancesTextView, lp);
-
-        lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-        lp.addRule(RelativeLayout.BELOW, mChancesTextView.getId());
-        mRl.addView(createButtons(), lp);
-
-        lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         final TableLayout footerTable = createFooterView();
         mRl.addView(footerTable, lp);
@@ -92,10 +79,25 @@ public class GameUiFragment extends Fragment {
         lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ABOVE, answersTable.getId());
         mNumCorrectTextView = new TextView(mFragActivity);
+        mNumCorrectTextView.setId(NUM_CORRECT_VIEW_ID);
         mNumCorrectTextView.setGravity(Gravity.CENTER);
         mNumCorrectTextView.setTextColor(Color.BLACK);
         setCurrentTurnText();
         mRl.addView(mNumCorrectTextView, lp);
+
+        lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ABOVE, mNumCorrectTextView.getId());
+        final TableLayout buttonsTable = createButtons();
+        mRl.addView(buttonsTable, lp);
+
+        lp = new RelativeLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+        lp.addRule(RelativeLayout.ABOVE, buttonsTable.getId());
+        mChancesTextView = new TextView(mFragActivity);
+        mChancesTextView.setGravity(Gravity.CENTER);
+        mChancesTextView.setTextColor(Color.BLACK);
+        mChancesTextView.setPadding(0, padding, 0, padding * 2);
+        setChancesText();
+        mRl.addView(mChancesTextView, lp);
 
         return mRl;
     } // onCreateView(LayoutInflater, ViewGroup, Bundle)
@@ -156,6 +158,7 @@ public class GameUiFragment extends Fragment {
 
     private TableLayout createButtons() {
         final TableLayout tl = new TableLayout(mFragActivity);
+        tl.setId(BUTTONS_VIEW_ID);
         final TableRow tr = new TableRow(mFragActivity);
         tr.setGravity(Gravity.CENTER);
         final ImageView red = new ImageView(mFragActivity);
