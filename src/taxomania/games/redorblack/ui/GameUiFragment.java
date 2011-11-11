@@ -6,7 +6,6 @@ import taxomania.games.redorblack.R;
 import taxomania.games.redorblack.TopScorePrefs;
 import taxomania.games.redorblack.engine.GameEngine;
 import taxomania.games.redorblack.engine.GameEngine.Colour;
-import taxomania.games.redorblack.engine.SimpleGameEngine;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,7 +45,7 @@ public class GameUiFragment extends Fragment {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGame = new SimpleGameEngine();
+        mGame = new GameEngine();
         mFragActivity = (RedOrBlackActivity) getActivity();
     } // onCreate(Bundle)
 

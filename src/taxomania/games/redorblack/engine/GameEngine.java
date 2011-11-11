@@ -1,6 +1,6 @@
 package taxomania.games.redorblack.engine;
 
-public abstract class GameEngine {
+public class GameEngine {
     // @formatter:off
     public static enum Colour { RED, BLACK };
     // @formatter:on
@@ -12,10 +12,11 @@ public abstract class GameEngine {
         return Math.pow(0.5, guess + 1);
     } // getProbability(int)
 
-    protected final Colour selectColour() {
+    public Colour getColour() {
         return ((int) Math.round(Math.random()) == 0) ? Colour.RED : Colour.BLACK;
-    } // selectColour()
+    } // getColour()
 
-    public abstract Colour getColour(int pos);
-    public abstract boolean checkColour(Colour colour);
+    public boolean checkColour(final Colour colour){
+        return getColour().equals(colour);
+    } // checkColour(Colour)
 } // GameEngine
