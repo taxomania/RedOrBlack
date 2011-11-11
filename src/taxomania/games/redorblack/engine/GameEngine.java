@@ -17,4 +17,5 @@ public abstract class GameEngine {
     } // selectColour()
 
     public abstract Colour getColour(int pos);
+    public abstract boolean checkColour(Colour colour);
 } // GameEngine

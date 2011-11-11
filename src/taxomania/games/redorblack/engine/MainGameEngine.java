@@ -14,4 +14,14 @@ public class MainGameEngine extends GameEngine {
     public Colour getColour(final int pos) {
         return mColours[pos];
     } // getColour(int)
+
+
+    // Not used in testing
+    @Override
+    public boolean checkColour(Colour colour) {
+        return checkColour(colour,0);
+    } // checkColour
+    public boolean checkColour(final Colour colour, final int pos) {
+        return getColour(pos).equals(colour);
+    } // checkColour(Colour, int)
 } // MainGameEngine

@@ -6,7 +6,7 @@ import taxomania.games.redorblack.R;
 import taxomania.games.redorblack.TopScorePrefs;
 import taxomania.games.redorblack.engine.GameEngine;
 import taxomania.games.redorblack.engine.GameEngine.Colour;
-import taxomania.games.redorblack.engine.SimpleGameEngine;
+import taxomania.games.redorblack.engine.MainGameEngine;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,7 +46,7 @@ public class GameUiFragment extends Fragment {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mGame = new SimpleGameEngine();
+        mGame = new MainGameEngine();
         mFragActivity = (RedOrBlackActivity) getActivity();
     } // onCreate(Bundle)
 
@@ -188,7 +188,7 @@ public class GameUiFragment extends Fragment {
     } // createButtons()
 
     private void updateAnswerBlock(final Colour colour) {
-        if (mGame.getColour(mGuess).equals(colour)) {
+        if (mGame.checkColour(colour)) {
             switch (colour) {
                 case BLACK:
                     ((ImageView) mRl.findViewWithTag((Integer) mGuess))
