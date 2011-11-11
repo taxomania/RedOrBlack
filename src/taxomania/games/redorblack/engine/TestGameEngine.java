@@ -1,14 +1,8 @@
 package taxomania.games.redorblack.engine;
 
-public class TestGameEngine extends GameEngine {
-
+public class TestGameEngine extends SimpleGameEngine {
     @Override
-    public Colour getColour(int pos) {
-        return null;
-    }
-
-    @Override
-    public boolean checkColour(Colour colour) {
+    public boolean checkColour(final Colour colour) {
         return true;
-    }
+    } // checkColour(Colour)
 } // TestGameEngine
