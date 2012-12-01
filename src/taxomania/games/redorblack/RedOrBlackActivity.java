@@ -1,6 +1,5 @@
 package taxomania.games.redorblack;
 
-import taxomania.games.redorblack.R;
 import taxomania.games.redorblack.EndGameFragment.EndGameListener;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -19,7 +18,7 @@ public final class RedOrBlackActivity extends FragmentActivity implements EndGam
     private PostTopScore mScorePoster = null;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(setLayout());
         startNewGame();
