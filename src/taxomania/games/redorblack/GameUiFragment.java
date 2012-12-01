@@ -1,16 +1,13 @@
-package taxomania.games.redorblack.ui;
+package taxomania.games.redorblack;
 
 import java.text.NumberFormat;
 
 import taxomania.games.redorblack.R;
-import taxomania.games.redorblack.TopScorePrefs;
-import taxomania.games.redorblack.engine.GameEngine;
-import taxomania.games.redorblack.engine.GameEngine.Colour;
+import taxomania.games.redorblack.GameEngine.Colour;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,8 +21,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class GameUiFragment extends Fragment {
-    private static final String TAG = GameUiFragment.class.getSimpleName();
+public final class GameUiFragment extends Fragment {
     private static final int MAX_TURNS = 20;
     private static final int FOOTER_VIEW_ID = Integer.MAX_VALUE;
     private static final int ANSWER_VIEW_ID = FOOTER_VIEW_ID - 1;
@@ -39,9 +35,6 @@ public class GameUiFragment extends Fragment {
     private RedOrBlackActivity mFragActivity;
     private RelativeLayout mRl;
     private TextView mTopScoreTextView, mNumCorrectTextView, mChancesTextView;
-
-    public GameUiFragment() {
-    } // GameFragment()
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -107,7 +100,7 @@ public class GameUiFragment extends Fragment {
         tl.setId(FOOTER_VIEW_ID);
         final TableRow tr = new TableRow(mFragActivity);
         mTopScoreTextView = new TextView(mFragActivity);
-        setTopScoreText();
+        setTopScoreText(sHighscore);
         mTopScoreTextView.setTextColor(Color.BLACK);
         tr.addView(mTopScoreTextView);
         tl.addView(tr);
@@ -126,11 +119,6 @@ public class GameUiFragment extends Fragment {
     private void setCurrentTurnText() {
         mNumCorrectTextView.setText("Correct: " + mGuess);
     } // setCurrentTurnText()
-
-    // Default implementation
-    private void setTopScoreText() {
-        setTopScoreText(sHighscore);
-    } // setTopScoreText()
 
     private void setTopScoreText(final int score) {
         mTopScoreTextView.setText("Best Score: " + score);
@@ -189,6 +177,9 @@ public class GameUiFragment extends Fragment {
         return tl;
     } // createButtons()
 
+    public GameUiFragment() {
+    }
+
     private void updateAnswerBlock(final Colour colour) {
         if (mGame.checkColour(colour)) {
             switch (colour) {
@@ -212,10 +203,8 @@ public class GameUiFragment extends Fragment {
                 checkScore();
                 mFragActivity.winGame();
             } // if
-            Log.d(TAG, "Correct");
         } // if
         else {
-            Log.d(TAG, "Incorrect");
             checkScore();
             mFragActivity.loseGame();
         } // else
@@ -225,9 +214,6 @@ public class GameUiFragment extends Fragment {
         if (mGuess > sHighscore) {
             mFragActivity.postTopScore(mGuess);
         } // if
-        else {
-            Log.d(TAG, mGuess + " : " + sHighscore);
-        } // else
     } // checkScore()
 
     private RetrieveTopScore mScoreGetter = null;
@@ -259,9 +245,7 @@ public class GameUiFragment extends Fragment {
 
         @Override
         protected void onPostExecute(final Integer result) {
-            sHighscore = result;
-            setTopScoreText();
+            setTopScoreText(sHighscore = result);
         } // onPostExecute(Integer)
-    } // RetrieveTopScore
-
-} // GameFragment
+    } // class RetrieveTopScore
+} // class GameFragment

@@ -3,7 +3,7 @@ package taxomania.games.redorblack;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class TopScorePrefs {
+public final class TopScorePrefs {
     private static final String PREFERENCES = "RedOrBlack_Prefs";
     private static final String KEY_SCORE = "score";
     private static final int DEFAULT = 0;
@@ -22,7 +22,7 @@ public class TopScorePrefs {
         return new Editor();
     } // edit()
 
-    public class Editor {
+    public final class Editor {
         private final SharedPreferences.Editor mEdit;
 
         public Editor() {
@@ -41,6 +41,5 @@ public class TopScorePrefs {
         public boolean reset() {
             return putScore(DEFAULT).commit();
         } // reset()
-    } // TopScorePrefs.Editor
-
-} // TopScorePrefs
+    } // class TopScorePrefs.Editor
+} // class TopScorePrefs

@@ -1,7 +1,8 @@
-package taxomania.games.redorblack.ui;
+package taxomania.games.redorblack;
 
 import taxomania.games.redorblack.R;
-import taxomania.games.redorblack.TopScorePrefs;
+import taxomania.games.redorblack.EndGameFragment.EndGameListener;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class RedOrBlackActivity extends FragmentActivity {
+public final class RedOrBlackActivity extends FragmentActivity implements EndGameListener {
     private static final int MAIN_LAYOUT_ID = Integer.MAX_VALUE;
     private static final int PADDING_DIP = 10;
 
@@ -38,24 +39,25 @@ public class RedOrBlackActivity extends FragmentActivity {
     } // setLayout()
 
     void loseGame() {
-        replaceFragment(new LoseGameFragment());
+        replaceFragment(EndGameFragment.newLoseGameFragment());
     } // loseGame()
 
     void winGame() {
-        replaceFragment(new WinGameFragment());
+        replaceFragment(EndGameFragment.newWinGameFragment());
     } // winGame()
 
     private void replaceFragment(final Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(MAIN_LAYOUT_ID, fragment).commit();
     } // replaceFragment(Fragment)
 
-    void startNewGame() {
+    @Override
+    public void startNewGame() {
         replaceFragment(new GameUiFragment());
     } // startNewGame()
 
     void postTopScore(final int score) {
         stopScorePoster();
-        mScorePoster = new PostTopScore();
+        mScorePoster = new PostTopScore(this);
         mScorePoster.execute(score);
     } // postTopScore(int)
 
@@ -72,11 +74,16 @@ public class RedOrBlackActivity extends FragmentActivity {
         } // if
     } // stopScorePoster
 
-    private final class PostTopScore extends AsyncTask<Integer, Void, Boolean> {
+    private static final class PostTopScore extends AsyncTask<Integer, Void, Boolean> {
+        private final Context mContext;
+
+        PostTopScore(final Context context) {
+            mContext = context;
+        } // PostTopScore(Context)
+
         @Override
         protected Boolean doInBackground(final Integer... params) {
-            return new TopScorePrefs(RedOrBlackActivity.this).edit().putScore(params[0]).commit();
+            return new TopScorePrefs(mContext).edit().putScore(params[0]).commit();
         } // doInBackground(Integer)
-    } // PostTopScore
-
-} // RedOrBlackActivity
+    } // class PostTopScore
+} // class RedOrBlackActivity
